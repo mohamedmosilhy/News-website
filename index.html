@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>News</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Roboto:wght@500&display=swap"
+            rel="stylesheet">
+        <link rel="icon" href="assets/news-low-resolution-logo-color-on-transparent-background.png" type="image/x-icon">
+    </head>
+
+    <body>
+        <nav>
+            <div class="main-nav flex container">
+                <a href="#" onclick='reload()' class="company-logo"> <img
+                        src="assets/news-low-resolution-logo-color-on-transparent-background.png" alt="logo"></a>
+
+                <div class="nav-links">
+                    <ul class="flex">
+                        <li class="hover-link nav-item" id="football" onclick="onNavItemClick('football')">Football</li>
+                        <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                        <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+                        <li class="hover-link nav-item" id="science" onclick="onNavItemClick('science')">Science</li>
+                    </ul>
+                </div>
+
+                <div class="search-bar flex">
+                    <input type="text" class="news-input" placeholder="e.g Science" id="search-text">
+                    <button class="search-button" id="search-button">Search</button>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <div class="cards-container container flex" id="cards-container">
+            </div>
+        </main>
+
+        <template id="template-news-card">
+            <div class="card">
+                <div class="card-header">
+                    <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+                </div>
+                <div class="card-content">
+                    <h3 id="news-title">This is the Title</h3>
+                    <h6 class="news-source" id="news-source">End Gadget 26/8/2023</h6>
+                    <p class="news-desc" id="news-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Unde porro earum,
+                        illo iste at laborum dolorem commodi quaerat saepe. Placeat natus, ut impedit minus ipsum
+                        esse quam ex. Autem, id. </p>
+                </div>
+            </div>
+        </template>
+    </body>
+
+</html>
