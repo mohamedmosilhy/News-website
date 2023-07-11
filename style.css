@@ -4,10 +4,17 @@
     padding: 0;
 }
 
+:root {
+    --Dark-classic-blue-color: #0A1828;
+    --turquoise-color: #178582;
+    --gold-color: #BFA181;
+}
+
 
 body {
     font-family: 'Poppins', sans-serif;
     color: rgb(35, 33, 33);
+    background-color: var(--Dark-classic-blue-color);
 }
 
 
@@ -21,7 +28,7 @@ p {
 }
 
 .nav-item.active {
-    color: rgb(0, 153, 255);
+    color: var(--gold-color)
 }
 
 ul {
@@ -40,13 +47,14 @@ ul {
 }
 
 nav {
-    background-color: #f3faff;
+    background-color: #081521e6;
     box-shadow: 0 0 4px #bbd0e2;
     position: fixed;
     z-index: 99;
     top: 0;
     left: 0;
     right: 0;
+    color: var(--turquoise-color);
 }
 
 .main-nav {
@@ -69,7 +77,7 @@ nav {
 }
 
 .hover-link:active {
-    color: red;
+    color: var(--gold-color);
 }
 
 .hover-link {
@@ -90,8 +98,9 @@ nav {
     font-family: 'Roboto', sans-serif;
 }
 
+
 .search-button {
-    background-color: rgb(0, 153, 255);
+    background-color: var(--turquoise-color);
     color: white;
     cursor: pointer;
     padding: 8px 24px;
@@ -100,7 +109,7 @@ nav {
 }
 
 .search-button:hover {
-    background-color: rgb(3, 111, 183);
+    background-color: rgb(75, 75, 75);
 }
 
 
@@ -116,7 +125,8 @@ main {
     border-radius: 4px;
     cursor: pointer;
     overflow: hidden;
-    background-color: #fff;
+    background-color: var(--Dark-classic-blue-color);
+    color: var(--gold-color);
 }
 
 .cards-container {
@@ -132,6 +142,7 @@ main {
     box-shadow: 1px 1px 8px #d4ecff;
     background-color: #f9f9f9;
     transform: translateY(-2px);
+    color: black;
 }
 
 .card-header img {
@@ -146,4 +157,31 @@ main {
 
 .news-source {
     margin-block: 12px;
+}
+
+.select {
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 5px;
+    height: 30px;
+    border: 2px solid #bbd0e2;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+label {
+    margin-inline-end: 5px;
+}
+
+
+.news-input:focus,
+.select:focus,
+.select:focus option {
+    border-color: var(--gold-color);
+    outline: none;
+}
+
+.select:focus {
+    border-color: var(--gold-color);
+    outline: none;
 }

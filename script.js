@@ -1,13 +1,27 @@
-const API_KEY = "2f81ce5e5dd84d06b45791647e4231bc";
+const API_KEY = "a7d7d755ff22445ab6f87facb98ff453";
 const URL = "https://newsapi.org/v2/everything?q=";
 
-window.addEventListener('load', () => fetchNews('Egypt'));
+let currQuery = null;
 
-async function fetchNews(query) {
-    const res = await fetch(`${URL}${query}&apikey=${API_KEY}`);
+window.addEventListener('load', () => fetchNews('Egypt', ""));
+
+async function fetchNews(query, filter) {
+    currQuery = query;
+    let res;
+    let url;
+    if (filter === "" || filter === null) {
+        res = await fetch(`${URL}${query}&apikey=${API_KEY}`);
+        url = `${URL}${query}&apikey=${API_KEY}`
+    }
+    else {
+        res = await fetch(`${URL}${query}&apikey=${API_KEY}&sortBy=${filter}`);
+        url = `${URL}${query}&apikey=${API_KEY}&sortBy=${filter}`
+    }
+
     const data = await res.json();
     console.log(data);
-    bindData(data.articles);
+    console.log(url);
+    bindData(data.articles, filter)
 }
 
 function bindData(articles) {
@@ -35,9 +49,26 @@ function fillDataInCard(cardClone, article) {
     newsImg.src = article.urlToImage;
     newsTitle.innerHTML = article.title;
 
-    const date = new Date(article.publishedAt).toLocaleString('en-US', {
-        timeZone: 'Africa/Cairo', hour12: true
-    });
+
+    // "MM/DD/YYYY, HH:MM:SS AM/PM"
+    // const date = new Date(article.publishedAt).toLocaleString('en-US', {
+    //     timeZone: 'Africa/Cairo', hour12: true
+    // });
+
+    // "DD/MM/YYYY, HH:MM:SS AM/PM" 
+    const publishedDate = new Date(article.publishedAt);
+    const day = publishedDate.getDate().toString().padStart(2, '0');
+    const month = (publishedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = publishedDate.getFullYear().toString();
+    let hours = publishedDate.getHours();
+    const minutes = publishedDate.getMinutes().toString().padStart(2, '0');
+    const seconds = publishedDate.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+    const date = `${day}/${month}/${year}, ${formattedTime}`;
 
     newsSource.innerHTML = `${article.source.name} . ${date}`;
 
@@ -48,7 +79,9 @@ function fillDataInCard(cardClone, article) {
 
 let currSelectedItem = null;
 function onNavItemClick(id) {
-    fetchNews(id);
+    fetchNews(id, '');
+    let filter = document.getElementById("filters");
+    filter.value = ""
     const navItem = document.getElementById(id);
     currSelectedItem?.classList.remove("active");
     currSelectedItem = navItem;
@@ -70,4 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function reload() {
     window.location.reload()
+}
+
+
+function handelFilters(event) {
+    const selectedIndex = event.target.selectedIndex;
+    const selectedOption = event.target.options[selectedIndex];
+    fetchNews(currQuery, selectedOption.value)
 }
