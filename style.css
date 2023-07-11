@@ -6,10 +6,11 @@
 
 :root {
     --Dark-classic-blue-color: #0A1828;
-    --turquoise-color: #178582;
+    --turquoise-color: #13aca7;
     --gold-color: #BFA181;
 }
 
+/* --turquoise-color: #178582; */
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -28,7 +29,7 @@ p {
 }
 
 .nav-item.active {
-    color: var(--gold-color)
+    color: white
 }
 
 ul {
@@ -126,7 +127,7 @@ main {
     cursor: pointer;
     overflow: hidden;
     background-color: var(--Dark-classic-blue-color);
-    color: var(--gold-color);
+    color: white;
 }
 
 .cards-container {
