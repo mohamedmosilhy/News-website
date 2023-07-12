@@ -11,7 +11,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Roboto:wght@500&display=swap"
             rel="stylesheet">
-        <link rel="icon" href="assets/news-low-resolution-logo-color-on-transparent-background.png" type="image/x-icon">
+        <link rel="icon" href="assets/news-low-resolution-logo-white-on-transparent-background.png" type="image/x-icon">
     </head>
 
     <body>
@@ -25,7 +25,8 @@
                         <li class="hover-link nav-item" id="football" onclick="onNavItemClick('football')">Football</li>
                         <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
                         <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
-                        <li class="hover-link nav-item" id="science" onclick="onNavItemClick('science')">Science</li>
+                        <li class="hover-link nav-item" id="bookmarks" onclick="onNavItemClick('bookmarks')">Bookmarks
+                        </li>
                     </ul>
                 </div>
 
@@ -34,7 +35,7 @@
                     <button class="search-button" id="search-button">Search</button>
                 </div>
 
-                <div class="filters">
+                <div class="filters" id="filter-div">
                     <label for="filters">Filters</label>
                     <select name="filters" id="filters" class="select" onchange="handelFilters(event)">
                         <option value="" selected> None</option>
@@ -53,8 +54,10 @@
 
         <template id="template-news-card">
             <div class="card">
+                <img src=" assets/bookmark.png" alt="bookmark-icon" class="bookmark-icon"
+                    onclick="handelBookmark(event)">
                 <div class="card-header">
-                    <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+                    <img class="news-image" src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
                 </div>
                 <div class="card-content">
                     <h3 id="news-title">This is the Title</h3>

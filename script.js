@@ -2,26 +2,58 @@ const API_KEY = "a7d7d755ff22445ab6f87facb98ff453";
 const URL = "https://newsapi.org/v2/everything?q=";
 
 let currQuery = null;
+let bookmarks = [];
+let counter = 0;
+let validArticles = [];
 
 window.addEventListener('load', () => fetchNews('Egypt', ""));
 
-async function fetchNews(query, filter) {
+async function fetchNews(query, filterQuery) {
     currQuery = query;
     let res;
-    let url;
-    if (filter === "" || filter === null) {
-        res = await fetch(`${URL}${query}&apikey=${API_KEY}`);
-        url = `${URL}${query}&apikey=${API_KEY}`
+    if (query === "bookmarks") {
+        bindDataBookmarks(bookmarks)
+        const filter = document.getElementById('filter-div');
+        filter.style.display = 'none';
     }
     else {
-        res = await fetch(`${URL}${query}&apikey=${API_KEY}&sortBy=${filter}`);
-        url = `${URL}${query}&apikey=${API_KEY}&sortBy=${filter}`
+
+        const filter = document.getElementById('filter-div');
+        filter.style.display = 'block';
+
+        if (filter === "" || filter === null) {
+            res = await fetch(`${URL}${query}&apikey=${API_KEY}`);
+        }
+        else {
+            res = await fetch(`${URL}${query}&apikey=${API_KEY}&sortBy=${filterQuery}`);
+        }
+
+        const data = await res.json();
+
+        bindData(data.articles)
     }
 
-    const data = await res.json();
-    console.log(data);
-    console.log(url);
-    bindData(data.articles, filter)
+    counter = 0;
+}
+
+
+function bindDataBookmarks(articles) {
+    const cardsContainer = document.getElementById('cards-container');
+    const templateNewsCard = document.getElementById('template-news-card');
+
+    cardsContainer.innerHTML = "";
+
+
+    articles.forEach(article => {
+        if (!article.urlToImage) return;
+        const cardClone = templateNewsCard.content.cloneNode(true)
+        if ((bookmarks.find((element) => article.url === element.url))) {
+            let bookmarkIcon = cardClone.querySelector('.bookmark-icon')
+            bookmarkIcon.setAttribute('src', "assets/bookmark1.png");
+        }
+        fillDataInCard(cardClone, article);
+        cardsContainer.appendChild(cardClone)
+    });
 }
 
 function bindData(articles) {
@@ -29,10 +61,16 @@ function bindData(articles) {
     const templateNewsCard = document.getElementById('template-news-card');
 
     cardsContainer.innerHTML = "";
+    validArticles = [];
 
     articles.forEach(article => {
         if (!article.urlToImage) return;
+        validArticles.push(article);
         const cardClone = templateNewsCard.content.cloneNode(true)
+        if ((bookmarks.find((element) => article.url === element.url))) {
+            let bookmarkIcon = cardClone.querySelector('.bookmark-icon')
+            bookmarkIcon.setAttribute('src', "assets/bookmark1.png");
+        }
         fillDataInCard(cardClone, article);
         cardsContainer.appendChild(cardClone)
     });
@@ -40,20 +78,19 @@ function bindData(articles) {
 
 
 function fillDataInCard(cardClone, article) {
+    const card = cardClone.querySelector('.card')
     const newsImg = cardClone.querySelector('#news-img')
     const newsSource = cardClone.querySelector('#news-source')
     const newsDesc = cardClone.querySelector('#news-desc')
     const newsTitle = cardClone.querySelector('#news-title')
+    const bookmarkIcon = cardClone.querySelector('.bookmark-icon')
 
+    card.setAttribute('id', `${counter}`);
+    bookmarkIcon.setAttribute('id', `${counter}`);
+    counter = counter + 1
     newsDesc.innerHTML = article.description;
     newsImg.src = article.urlToImage;
     newsTitle.innerHTML = article.title;
-
-
-    // "MM/DD/YYYY, HH:MM:SS AM/PM"
-    // const date = new Date(article.publishedAt).toLocaleString('en-US', {
-    //     timeZone: 'Africa/Cairo', hour12: true
-    // });
 
     // "DD/MM/YYYY, HH:MM:SS AM/PM" 
     const publishedDate = new Date(article.publishedAt);
@@ -79,7 +116,7 @@ function fillDataInCard(cardClone, article) {
 
 let currSelectedItem = null;
 function onNavItemClick(id) {
-    fetchNews(id, '');
+    fetchNews(id, ``);
     let filter = document.getElementById("filters");
     filter.value = ""
     const navItem = document.getElementById(id);
@@ -110,4 +147,30 @@ function handelFilters(event) {
     const selectedIndex = event.target.selectedIndex;
     const selectedOption = event.target.options[selectedIndex];
     fetchNews(currQuery, selectedOption.value)
+}
+
+function handelBookmark(event) {
+    event.stopPropagation()
+    let id;
+    if (currQuery === "bookmarks") {
+        if (event.target.attributes[0].nodeValue === "assets/bookmark1.png") {
+            id = event.target.attributes['id'].nodeValue
+            const newBookmarks = bookmarks.filter(element => element.url !== bookmarks[id].url);
+            bookmarks = newBookmarks;
+            fetchNews(currQuery)
+        }
+    }
+    else {
+        id = event.target.attributes['id'].nodeValue
+
+        if (event.target.attributes[0].nodeValue === "assets/bookmark1.png") {
+            event.target.attributes[0].nodeValue = "assets/bookmark.png"
+            bookmarks = bookmarks.filter(element => element.url !== validArticles[id].url);
+        }
+        else if (event.target.attributes[0].nodeValue = "assets/bookmark.png") {
+            event.target.attributes[0].nodeValue = "assets/bookmark1.png"
+            bookmarks.push(validArticles[id])
+        }
+    }
+    console.log(bookmarks)
 }
